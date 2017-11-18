@@ -6,7 +6,13 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import javax.swing.event.ChangeListener;
+import service.ServiceGetStringSubmit;
 
 /**
  *
@@ -188,13 +194,30 @@ public class view2 extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(view2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new view2().setVisible(true);
             }
         });
+        try {
+            ServerSocket ss = new ServerSocket(9090);
+            Socket s = ss.accept();
+            System.out.println("da ket noi!");
+            DataInputStream inp = new DataInputStream(s.getInputStream());
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
+            String data = "";
+            while (true){
+                data = ServiceGetStringSubmit.getString(inp);
+                if (!data.equalsIgnoreCase("")){
+                    System.out.println(data);
+                }
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
